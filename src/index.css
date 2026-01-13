@@ -52,9 +52,10 @@
     --document-shadow: 0 0% 30%;
     
     /* Rulers */
-    --ruler: 0 0% 95%;
-    --ruler-foreground: 0 0% 40%;
-    --ruler-tick: 0 0% 50%;
+    --ruler: 0 0% 28%; /* Dark ruler like reference */
+    --ruler-foreground: 0 0% 65%;
+    --ruler-tick: 0 0% 55%;
+    --ruler-cursor: 0 0% 100%; /* White cursor indicator */
     
     /* Swatches */
     --swatch-foreground: 0 0% 0%;
