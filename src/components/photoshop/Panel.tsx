@@ -20,10 +20,10 @@ export const Panel: React.FC<PanelProps> = ({
   const [expanded, setExpanded] = useState(defaultExpanded);
 
   return (
-    <div className="border-b border-border bg-panel">
+    <div className="border-b border-border bg-panel flex flex-col h-full">
       {/* Panel header with tabs or title */}
       {tabs ? (
-        <div className="h-tab-h bg-panel-header border-b border-border-light flex">
+        <div className="h-tab-h bg-panel-header border-b border-border-light flex shrink-0">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -48,7 +48,7 @@ export const Panel: React.FC<PanelProps> = ({
         </div>
       ) : (
         <div
-          className="h-panel-header bg-panel-header border-b border-border-light flex items-center px-2 cursor-pointer hover:bg-muted"
+          className="h-panel-header bg-panel-header border-b border-border-light flex items-center px-2 cursor-pointer hover:bg-muted shrink-0"
           onClick={() => setExpanded(!expanded)}
         >
           <span className="text-xs font-medium flex-1">{title}</span>
@@ -57,7 +57,7 @@ export const Panel: React.FC<PanelProps> = ({
       )}
       
       {/* Panel content */}
-      {expanded && <div className="p-2">{children}</div>}
+      {expanded && <div className="p-2 flex-1 overflow-auto">{children}</div>}
     </div>
   );
 };

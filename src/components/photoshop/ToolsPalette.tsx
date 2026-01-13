@@ -1,61 +1,272 @@
 import React, { useState } from "react";
+import { ToolIcons } from "./ToolIcons";
 
 interface Tool {
   id: string;
   icon: React.ReactNode;
   title: string;
+  subtools?: Tool[];
 }
 
-const createIcon = (paths: string) => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-    <path d={paths} />
-  </svg>
-);
-
 const tools: Tool[] = [
-  { id: "move", icon: createIcon("M8 1l3 3h-2v4h4v-2l3 3-3 3v-2h-4v4h2l-3 3-3-3h2v-4h-4v2l-3-3 3-3v2h4v-4h-2z"), title: "Move Tool (V)" },
-  { id: "marquee", icon: createIcon("M2 2h12v12h-12z M3 3v10h10v-10z"), title: "Rectangular Marquee Tool (M)" },
-  { id: "lasso", icon: createIcon("M8 2c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6c0-1.5.5-2.8 1.4-3.9l1.4 1.1c-.5.8-.8 1.7-.8 2.8 0 2.8 2.2 5 5 5s5-2.2 5-5-2.2-5-5-5v-1z"), title: "Lasso Tool (L)" },
-  { id: "magic-wand", icon: createIcon("M10.5 1l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM4 8l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z"), title: "Magic Wand Tool (W)" },
-  { id: "crop", icon: createIcon("M4 2v2h-2v10h10v-2h2v-10h-10zM5 4h6v6h-6z"), title: "Crop Tool (C)" },
-  { id: "eyedropper", icon: createIcon("M13 1l2 2-3 3-2-2zM9 5l2 2-7 7h-2v-2z"), title: "Eyedropper Tool (I)" },
-  { id: "healing", icon: createIcon("M8 2l2 2-6 6-2-2zM3 11l2 2 1-1-2-2z"), title: "Spot Healing Brush Tool (J)" },
-  { id: "brush", icon: createIcon("M12 2c1 0 2 1 2 2 0 1.5-3 4-5 6l-3 3c-1 1-2.5 1-3 .5s-.5-2 .5-3l3-3c2-2 4.5-5 5.5-5.5z"), title: "Brush Tool (B)" },
-  { id: "clone", icon: createIcon("M6 2c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zM10 6c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z"), title: "Clone Stamp Tool (S)" },
-  { id: "history", icon: createIcon("M8 1v2c-2.8 0-5 2.2-5 5h-2l3 3 3-3h-2c0-1.7 1.3-3 3-3v-2zM14 6l-3-3-3 3h2c0 1.7-1.3 3-3 3v2c2.8 0 5-2.2 5-5h2z"), title: "History Brush Tool (Y)" },
-  { id: "eraser", icon: createIcon("M12 4l-4 4-4-4v8l4 4 4-4v-8z"), title: "Eraser Tool (E)" },
-  { id: "gradient", icon: createIcon("M2 4h12v8h-12z"), title: "Gradient Tool (G)" },
-  { id: "blur", icon: createIcon("M8 4c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zM8 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"), title: "Blur Tool" },
-  { id: "dodge", icon: createIcon("M8 2c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6 2.7-6 6-6zM8 4v8"), title: "Dodge Tool (O)" },
-  { id: "pen", icon: createIcon("M2 14l1-4 8-8 3 3-8 8z"), title: "Pen Tool (P)" },
-  { id: "text", icon: createIcon("M4 3v2h3v9h2v-9h3v-2z"), title: "Horizontal Type Tool (T)" },
-  { id: "path", icon: createIcon("M4 8c0-2.2 1.8-4 4-4s4 1.8 4 4M2 8h12"), title: "Path Selection Tool (A)" },
-  { id: "shape", icon: createIcon("M3 3h10v10h-10z"), title: "Rectangle Tool (U)" },
-  { id: "hand", icon: createIcon("M12 7v-2c0-.6-.4-1-1-1s-1 .4-1 1v-1c0-.6-.4-1-1-1s-1 .4-1 1v-1c0-.6-.4-1-1-1s-1 .4-1 1v5l-1-1c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l3 3c.4.4 1 .6 1.6.6h2.8c1.1 0 2-.9 2-2v-3z"), title: "Hand Tool (H)" },
-  { id: "zoom", icon: createIcon("M7 3c-2.2 0-4 1.8-4 4s1.8 4 4 4c.9 0 1.7-.3 2.4-.8l2.4 2.4c.4.4 1 .4 1.4 0s.4-1 0-1.4l-2.4-2.4c.5-.7.8-1.5.8-2.4 0-2.2-1.8-4-4-4zM7 5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"), title: "Zoom Tool (Z)" },
+  { 
+    id: "move", 
+    icon: ToolIcons.move, 
+    title: "Move Tool (V)",
+  },
+  { 
+    id: "marquee", 
+    icon: ToolIcons.marqueeRect, 
+    title: "Rectangular Marquee Tool (M)",
+    subtools: [
+      { id: "marquee-rect", icon: ToolIcons.marqueeRect, title: "Rectangular Marquee Tool (M)" },
+      { id: "marquee-ellipse", icon: ToolIcons.marqueeEllipse, title: "Elliptical Marquee Tool (M)" },
+    ]
+  },
+  { 
+    id: "lasso", 
+    icon: ToolIcons.lasso, 
+    title: "Lasso Tool (L)",
+    subtools: [
+      { id: "lasso", icon: ToolIcons.lasso, title: "Lasso Tool (L)" },
+      { id: "polygon-lasso", icon: ToolIcons.polygonLasso, title: "Polygonal Lasso Tool (L)" },
+    ]
+  },
+  { 
+    id: "magic-wand", 
+    icon: ToolIcons.magicWand, 
+    title: "Magic Wand Tool (W)",
+    subtools: [
+      { id: "magic-wand", icon: ToolIcons.magicWand, title: "Magic Wand Tool (W)" },
+      { id: "quick-selection", icon: ToolIcons.quickSelection, title: "Quick Selection Tool (W)" },
+    ]
+  },
+  { 
+    id: "crop", 
+    icon: ToolIcons.crop, 
+    title: "Crop Tool (C)",
+    subtools: [
+      { id: "crop", icon: ToolIcons.crop, title: "Crop Tool (C)" },
+      { id: "slice", icon: ToolIcons.slice, title: "Slice Tool (C)" },
+    ]
+  },
+  { 
+    id: "eyedropper", 
+    icon: ToolIcons.eyedropper, 
+    title: "Eyedropper Tool (I)",
+    subtools: [
+      { id: "eyedropper", icon: ToolIcons.eyedropper, title: "Eyedropper Tool (I)" },
+      { id: "color-sampler", icon: ToolIcons.colorSampler, title: "Color Sampler Tool (I)" },
+      { id: "ruler", icon: ToolIcons.ruler, title: "Ruler Tool (I)" },
+    ]
+  },
+  { 
+    id: "healing", 
+    icon: ToolIcons.spotHealing, 
+    title: "Spot Healing Brush Tool (J)",
+    subtools: [
+      { id: "spot-healing", icon: ToolIcons.spotHealing, title: "Spot Healing Brush Tool (J)" },
+      { id: "healing-brush", icon: ToolIcons.healingBrush, title: "Healing Brush Tool (J)" },
+      { id: "patch", icon: ToolIcons.patchTool, title: "Patch Tool (J)" },
+    ]
+  },
+  { 
+    id: "brush", 
+    icon: ToolIcons.brush, 
+    title: "Brush Tool (B)",
+    subtools: [
+      { id: "brush", icon: ToolIcons.brush, title: "Brush Tool (B)" },
+      { id: "pencil", icon: ToolIcons.pencil, title: "Pencil Tool (B)" },
+      { id: "color-replace", icon: ToolIcons.colorReplace, title: "Color Replacement Tool (B)" },
+    ]
+  },
+  { 
+    id: "clone", 
+    icon: ToolIcons.cloneStamp, 
+    title: "Clone Stamp Tool (S)",
+    subtools: [
+      { id: "clone-stamp", icon: ToolIcons.cloneStamp, title: "Clone Stamp Tool (S)" },
+      { id: "pattern-stamp", icon: ToolIcons.patternStamp, title: "Pattern Stamp Tool (S)" },
+    ]
+  },
+  { 
+    id: "history", 
+    icon: ToolIcons.historyBrush, 
+    title: "History Brush Tool (Y)",
+    subtools: [
+      { id: "history-brush", icon: ToolIcons.historyBrush, title: "History Brush Tool (Y)" },
+      { id: "art-history", icon: ToolIcons.artHistoryBrush, title: "Art History Brush Tool (Y)" },
+    ]
+  },
+  { 
+    id: "eraser", 
+    icon: ToolIcons.eraser, 
+    title: "Eraser Tool (E)",
+    subtools: [
+      { id: "eraser", icon: ToolIcons.eraser, title: "Eraser Tool (E)" },
+      { id: "background-eraser", icon: ToolIcons.backgroundEraser, title: "Background Eraser Tool (E)" },
+    ]
+  },
+  { 
+    id: "gradient", 
+    icon: ToolIcons.gradient, 
+    title: "Gradient Tool (G)",
+    subtools: [
+      { id: "gradient", icon: ToolIcons.gradient, title: "Gradient Tool (G)" },
+      { id: "paint-bucket", icon: ToolIcons.paintBucket, title: "Paint Bucket Tool (G)" },
+    ]
+  },
+  { 
+    id: "blur", 
+    icon: ToolIcons.blur, 
+    title: "Blur Tool",
+    subtools: [
+      { id: "blur", icon: ToolIcons.blur, title: "Blur Tool" },
+      { id: "sharpen", icon: ToolIcons.sharpen, title: "Sharpen Tool" },
+      { id: "smudge", icon: ToolIcons.smudge, title: "Smudge Tool" },
+    ]
+  },
+  { 
+    id: "dodge", 
+    icon: ToolIcons.dodge, 
+    title: "Dodge Tool (O)",
+    subtools: [
+      { id: "dodge", icon: ToolIcons.dodge, title: "Dodge Tool (O)" },
+      { id: "burn", icon: ToolIcons.burn, title: "Burn Tool (O)" },
+      { id: "sponge", icon: ToolIcons.sponge, title: "Sponge Tool (O)" },
+    ]
+  },
+  { 
+    id: "pen", 
+    icon: ToolIcons.pen, 
+    title: "Pen Tool (P)",
+    subtools: [
+      { id: "pen", icon: ToolIcons.pen, title: "Pen Tool (P)" },
+      { id: "freeform-pen", icon: ToolIcons.freeformPen, title: "Freeform Pen Tool (P)" },
+      { id: "add-anchor", icon: ToolIcons.addAnchor, title: "Add Anchor Point Tool" },
+    ]
+  },
+  { 
+    id: "text", 
+    icon: ToolIcons.text, 
+    title: "Horizontal Type Tool (T)",
+    subtools: [
+      { id: "text-h", icon: ToolIcons.text, title: "Horizontal Type Tool (T)" },
+      { id: "text-v", icon: ToolIcons.verticalText, title: "Vertical Type Tool (T)" },
+      { id: "text-mask", icon: ToolIcons.textMask, title: "Horizontal Type Mask Tool (T)" },
+    ]
+  },
+  { 
+    id: "path-selection", 
+    icon: ToolIcons.pathSelection, 
+    title: "Path Selection Tool (A)",
+    subtools: [
+      { id: "path-selection", icon: ToolIcons.pathSelection, title: "Path Selection Tool (A)" },
+      { id: "direct-selection", icon: ToolIcons.directSelection, title: "Direct Selection Tool (A)" },
+    ]
+  },
+  { 
+    id: "shape", 
+    icon: ToolIcons.rectangle, 
+    title: "Rectangle Tool (U)",
+    subtools: [
+      { id: "rectangle", icon: ToolIcons.rectangle, title: "Rectangle Tool (U)" },
+      { id: "rounded-rect", icon: ToolIcons.roundedRect, title: "Rounded Rectangle Tool (U)" },
+      { id: "ellipse", icon: ToolIcons.ellipse, title: "Ellipse Tool (U)" },
+      { id: "polygon", icon: ToolIcons.polygon, title: "Polygon Tool (U)" },
+      { id: "line", icon: ToolIcons.line, title: "Line Tool (U)" },
+      { id: "custom-shape", icon: ToolIcons.customShape, title: "Custom Shape Tool (U)" },
+    ]
+  },
+  { 
+    id: "hand", 
+    icon: ToolIcons.hand, 
+    title: "Hand Tool (H)",
+    subtools: [
+      { id: "hand", icon: ToolIcons.hand, title: "Hand Tool (H)" },
+      { id: "rotate-view", icon: ToolIcons.rotatView, title: "Rotate View Tool (R)" },
+    ]
+  },
+  { 
+    id: "zoom", 
+    icon: ToolIcons.zoom, 
+    title: "Zoom Tool (Z)",
+  },
 ];
 
 export const ToolsPalette: React.FC = () => {
   const [activeTool, setActiveTool] = useState("marquee");
+  const [expandedTool, setExpandedTool] = useState<string | null>(null);
+  const [foregroundColor, setForegroundColor] = useState("#000000");
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
+
+  const handleToolClick = (toolId: string) => {
+    setActiveTool(toolId);
+    setExpandedTool(null);
+  };
+
+  const handleToolContextMenu = (e: React.MouseEvent, tool: Tool) => {
+    if (tool.subtools && tool.subtools.length > 0) {
+      e.preventDefault();
+      setExpandedTool(expandedTool === tool.id ? null : tool.id);
+    }
+  };
+
+  const swapColors = () => {
+    const temp = foregroundColor;
+    setForegroundColor(backgroundColor);
+    setBackgroundColor(temp);
+  };
+
+  const resetColors = () => {
+    setForegroundColor("#000000");
+    setBackgroundColor("#ffffff");
+  };
 
   return (
     <div className="w-tools-w bg-panel border-r border-border flex flex-col">
       {/* Tools grid */}
-      <div className="flex-1 p-1">
+      <div className="flex-1 p-1 overflow-y-auto">
         <div className="grid grid-cols-2 gap-[2px]">
           {tools.map((tool) => (
-            <button
-              key={tool.id}
-              title={tool.title}
-              onClick={() => setActiveTool(tool.id)}
-              className={`w-tool-btn h-tool-btn flex items-center justify-center border transition-colors ${
-                activeTool === tool.id
-                  ? "bg-tool-active border-border-dark pressed"
-                  : "bg-background border-border raised hover:bg-tool-hover"
-              }`}
-            >
-              {tool.icon}
-            </button>
+            <div key={tool.id} className="relative">
+              <button
+                title={tool.title}
+                onClick={() => handleToolClick(tool.id)}
+                onContextMenu={(e) => handleToolContextMenu(e, tool)}
+                className={`w-tool-btn h-tool-btn flex items-center justify-center border transition-colors relative ${
+                  activeTool === tool.id
+                    ? "bg-tool-active border-border-dark pressed"
+                    : "bg-background border-border raised hover:bg-tool-hover"
+                }`}
+              >
+                {tool.icon}
+                {tool.subtools && tool.subtools.length > 0 && (
+                  <span className="absolute bottom-0 right-0 text-[6px] leading-none">▸</span>
+                )}
+              </button>
+              
+              {/* Subtool flyout */}
+              {expandedTool === tool.id && tool.subtools && (
+                <div className="absolute left-full top-0 ml-1 bg-panel border border-border shadow-md z-50 min-w-[160px]">
+                  {tool.subtools.map((subtool) => (
+                    <button
+                      key={subtool.id}
+                      className="w-full flex items-center gap-2 px-2 py-1 text-xs hover:bg-menu-hover hover:text-menu-hover-foreground"
+                      onClick={() => {
+                        setActiveTool(tool.id);
+                        setExpandedTool(null);
+                      }}
+                    >
+                      <span className="w-4 h-4 flex items-center justify-center">
+                        {subtool.icon}
+                      </span>
+                      <span>{subtool.title}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
@@ -63,21 +274,35 @@ export const ToolsPalette: React.FC = () => {
       {/* Bottom section: Color swatches and mode buttons */}
       <div className="p-2 border-t border-border-light">
         {/* Foreground/Background color swatches */}
-        <div className="relative w-[38px] h-[38px] mb-2 ml-1">
+        <div className="relative w-[42px] h-[42px] mb-2 ml-1">
           {/* Background swatch */}
           <div
-            className="absolute bottom-0 right-0 w-[22px] h-[22px] border border-border bg-swatch-background"
+            className="absolute bottom-0 right-0 w-[24px] h-[24px] border border-border cursor-pointer"
+            style={{ backgroundColor: backgroundColor }}
+            title="Set background color"
           />
           {/* Foreground swatch */}
           <div
-            className="absolute top-0 left-0 w-[22px] h-[22px] border border-border bg-swatch-foreground"
+            className="absolute top-0 left-0 w-[24px] h-[24px] border border-border cursor-pointer"
+            style={{ backgroundColor: foregroundColor }}
+            title="Set foreground color"
           />
           {/* Swap icon */}
-          <button className="absolute top-0 right-1 text-2xs" title="Switch Foreground and Background Colors (X)">
-            ↔
+          <button 
+            className="absolute top-0 right-0 w-3 h-3 flex items-center justify-center text-[8px] hover:bg-muted"
+            title="Switch Foreground and Background Colors (X)"
+            onClick={swapColors}
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+              <path d="M1 3h6l-2-2M9 7H3l2 2" stroke="currentColor" strokeWidth="1" fill="none"/>
+            </svg>
           </button>
           {/* Default icon */}
-          <button className="absolute bottom-0 left-0 text-2xs" title="Default Foreground and Background Colors (D)">
+          <button 
+            className="absolute bottom-0 left-0 w-3 h-3 flex items-center justify-center hover:bg-muted"
+            title="Default Foreground and Background Colors (D)"
+            onClick={resetColors}
+          >
             <svg width="10" height="10" viewBox="0 0 10 10">
               <rect x="0" y="4" width="4" height="4" fill="white" stroke="black" strokeWidth="0.5"/>
               <rect x="2" y="2" width="4" height="4" fill="black" stroke="black" strokeWidth="0.5"/>
@@ -87,14 +312,50 @@ export const ToolsPalette: React.FC = () => {
         
         {/* Quick Mask / Screen mode buttons */}
         <div className="flex gap-[2px]">
-          <button className="w-[22px] h-[22px] bg-background border border-border raised flex items-center justify-center" title="Edit in Standard Mode (Q)">
+          <button 
+            className="w-[22px] h-[22px] bg-tool-active border border-border pressed flex items-center justify-center" 
+            title="Edit in Standard Mode (Q)"
+          >
             <svg width="14" height="14" viewBox="0 0 14 14">
               <rect x="2" y="2" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="2"/>
             </svg>
           </button>
-          <button className="w-[22px] h-[22px] bg-background border border-border raised flex items-center justify-center" title="Edit in Quick Mask Mode (Q)">
+          <button 
+            className="w-[22px] h-[22px] bg-background border border-border raised flex items-center justify-center hover:bg-tool-hover" 
+            title="Edit in Quick Mask Mode (Q)"
+          >
             <svg width="14" height="14" viewBox="0 0 14 14">
               <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" strokeWidth="1"/>
+              <circle cx="7" cy="7" r="3" fill="currentColor" opacity="0.3"/>
+            </svg>
+          </button>
+        </div>
+        
+        {/* Screen mode buttons */}
+        <div className="flex gap-[2px] mt-2">
+          <button 
+            className="w-[14px] h-[14px] bg-tool-active border border-border pressed flex items-center justify-center" 
+            title="Standard Screen Mode (F)"
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10">
+              <rect x="1" y="1" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1"/>
+            </svg>
+          </button>
+          <button 
+            className="w-[14px] h-[14px] bg-background border border-border raised flex items-center justify-center hover:bg-tool-hover" 
+            title="Full Screen Mode with Menu Bar (F)"
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10">
+              <rect x="0" y="0" width="10" height="10" fill="currentColor"/>
+              <rect x="1" y="2" width="8" height="7" fill="white"/>
+            </svg>
+          </button>
+          <button 
+            className="w-[14px] h-[14px] bg-background border border-border raised flex items-center justify-center hover:bg-tool-hover" 
+            title="Full Screen Mode (F)"
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10">
+              <rect x="0" y="0" width="10" height="10" fill="currentColor"/>
             </svg>
           </button>
         </div>
