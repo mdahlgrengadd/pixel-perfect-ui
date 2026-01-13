@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { DocumentTabs } from "./DocumentTabs";
+import { BrushPreview } from "./BrushPreview";
 
 // Generate ruler tick marks with proper spacing like Photoshop
 const RulerTicks: React.FC<{ orientation: "horizontal" | "vertical"; length: number }> = ({
