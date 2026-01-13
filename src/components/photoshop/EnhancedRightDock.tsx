@@ -156,29 +156,27 @@ export const EnhancedRightDock: React.FC = () => {
   const dockedPanels = panels.filter((p) => !p.isFloating && !p.isClosed).sort((a, b) => a.order - b.order);
   const floatingPanels = panels.filter((p) => p.isFloating && !p.isClosed);
   const closedPanels = panels.filter((p) => p.isClosed);
+  const [activeColorTab, setActiveColorTab] = useState("color");
 
   // Render panel content based on ID
   const renderPanelContent = (panelId: string, isFloating: boolean = false) => {
     const panel = panels.find(p => p.id === panelId);
     const isCollapsed = panel?.isCollapsed || false;
 
-    const content = (() => {
+    // Get the raw content for each panel type
+    const getRawContent = () => {
       switch (panelId) {
         case "colorpicker":
-          return <ColorPickerPanel />;
+          return <ColorPickerPanel activeTab={activeColorTab} onTabChange={setActiveColorTab} />;
         case "properties":
           return <PropertiesPanel selectedTool={selectedTool} selectedLayer="Background" />;
         case "layers":
-          return (
-            <>
-              {activeLayerTab === "layers" ? (
-                <LayersPanelContent />
-              ) : (
-                <div className="text-xs text-muted-foreground text-center py-2">
-                  {activeLayerTab === "channels" ? "RGB, Red, Green, Blue" : "No paths"}
-                </div>
-              )}
-            </>
+          return activeLayerTab === "layers" ? (
+            <LayersPanelContent />
+          ) : (
+            <div className="text-xs text-muted-foreground text-center py-2">
+              {activeLayerTab === "channels" ? "RGB, Red, Green, Blue" : "No paths"}
+            </div>
           );
         case "history":
           return <HistoryPanelContent />;
@@ -191,23 +189,51 @@ export const EnhancedRightDock: React.FC = () => {
         default:
           return null;
       }
-    })();
+    };
 
-    if (isFloating) return content;
+    const content = getRawContent();
 
-    const tabs = panelId === "layers" ? [
-      { id: "layers", label: "Layers" },
-      { id: "channels", label: "Channels" },
-      { id: "paths", label: "Paths" },
-    ] : undefined;
+    // For floating windows, just return content wrapped in padding
+    if (isFloating) {
+      return content;
+    }
+
+    // Get tabs configuration for specific panels
+    const getTabsConfig = () => {
+      switch (panelId) {
+        case "colorpicker":
+          return {
+            tabs: [
+              { id: "color", label: "Color" },
+              { id: "swatches", label: "Swatches" },
+            ],
+            activeTab: activeColorTab,
+            onTabChange: setActiveColorTab,
+          };
+        case "layers":
+          return {
+            tabs: [
+              { id: "layers", label: "Layers" },
+              { id: "channels", label: "Channels" },
+              { id: "paths", label: "Paths" },
+            ],
+            activeTab: activeLayerTab,
+            onTabChange: setActiveLayerTab,
+          };
+        default:
+          return undefined;
+      }
+    };
+
+    const tabsConfig = getTabsConfig();
 
     return (
       <DraggablePanel
         id={panelId}
         title={panel?.title || panelId}
-        tabs={tabs}
-        activeTab={tabs ? activeLayerTab : undefined}
-        onTabChange={tabs ? setActiveLayerTab : undefined}
+        tabs={tabsConfig?.tabs}
+        activeTab={tabsConfig?.activeTab}
+        onTabChange={tabsConfig?.onTabChange}
         isCollapsed={isCollapsed}
         onClose={() => closePanel(panelId)}
         onUndock={() => undockPanel(panelId)}
