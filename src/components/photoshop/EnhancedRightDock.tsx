@@ -1,10 +1,17 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
+import { Panel as ResizablePanel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DraggablePanel, FloatingWindow, usePanelContext } from "./DockablePanel";
 import { ColorPickerPanel } from "./ColorPickerPanel";
 import { HistoryPanelContent } from "./HistoryPanel";
 import { NavigatorPanelContent } from "./NavigatorPanel";
 import { ActionsPanelContent } from "./ActionsPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
+
+const ResizeHandle: React.FC = () => (
+  <PanelResizeHandle className="h-1 bg-border-light hover:bg-accent cursor-row-resize flex items-center justify-center group">
+    <div className="w-8 h-0.5 bg-muted-foreground rounded opacity-50 group-hover:opacity-100" />
+  </PanelResizeHandle>
+);
 
 // Tool context for sharing selected tool state
 interface ToolContextType {
@@ -266,14 +273,31 @@ export const EnhancedRightDock: React.FC = () => {
           </div>
         )}
 
-        {/* Docked panels - flex layout for auto-sizing */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {dockedPanels.map((panel) => (
-            <div key={panel.id} className={`${panel.isCollapsed ? 'flex-shrink-0' : 'flex-1 min-h-0'} overflow-hidden`}>
-              {renderPanelContent(panel.id)}
-            </div>
-          ))}
-        </div>
+        {/* Docked panels with resizable heights */}
+        <PanelGroup direction="vertical" className="flex-1">
+          {dockedPanels.map((panel, index) => {
+            const isCollapsed = panel.isCollapsed;
+            // Calculate default size: collapsed panels get small fixed size, others share remaining space
+            const expandedPanels = dockedPanels.filter(p => !p.isCollapsed);
+            const defaultSize = isCollapsed ? 5 : (95 / Math.max(1, expandedPanels.length));
+            
+            return (
+              <React.Fragment key={panel.id}>
+                {index > 0 && <ResizeHandle />}
+                <ResizablePanel
+                  defaultSize={defaultSize}
+                  minSize={isCollapsed ? 3 : 8}
+                  maxSize={isCollapsed ? 5 : 90}
+                  collapsible={false}
+                >
+                  <div className="h-full overflow-hidden">
+                    {renderPanelContent(panel.id)}
+                  </div>
+                </ResizablePanel>
+              </React.Fragment>
+            );
+          })}
+        </PanelGroup>
       </div>
 
       {/* Floating windows */}
