@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-
+import { ThemeToggle } from "./ThemeToggle";
 interface MenuItem {
   label: string;
   shortcut?: string;
@@ -961,6 +961,12 @@ export const MenuBar: React.FC = () => {
           {item}
         </button>
       ))}
+      
+      {/* Spacer */}
+      <div className="flex-1" />
+      
+      {/* Theme toggle */}
+      <ThemeToggle />
       
       {menuOpen && activeMenu && menuData[activeMenu] && (
         <Submenu 

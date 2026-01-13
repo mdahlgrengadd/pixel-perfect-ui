@@ -67,6 +67,11 @@ export default {
           hover: "hsl(var(--menu-hover))",
           "hover-foreground": "hsl(var(--menu-hover-foreground))",
         },
+        tab: {
+          bar: "hsl(var(--tab-bar))",
+          active: "hsl(var(--tab-active))",
+          inactive: "hsl(var(--tab-inactive))",
+        },
       },
       fontFamily: {
         ui: ["Segoe UI", "Tahoma", "Arial", "sans-serif"],
