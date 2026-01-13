@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { DraggablePanel } from "./DockablePanel";
 
 // HSB to RGB conversion
 const hsbToRgb = (h: number, s: number, b: number): [number, number, number] => {
@@ -38,8 +37,19 @@ const rgbToHsb = (r: number, g: number, b: number): [number, number, number] => 
   return [Math.round(h), Math.round(s * 100), Math.round(v * 100)];
 };
 
-export const ColorPickerPanel: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("color");
+interface ColorPickerPanelProps {
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
+}
+
+export const ColorPickerPanel: React.FC<ColorPickerPanelProps> = ({
+  activeTab: externalActiveTab,
+  onTabChange,
+}) => {
+  const [internalActiveTab, setInternalActiveTab] = useState("color");
+  const activeTab = externalActiveTab ?? internalActiveTab;
+  const setActiveTab = onTabChange ?? setInternalActiveTab;
+
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [brightness, setBrightness] = useState(100);
@@ -51,11 +61,6 @@ export const ColorPickerPanel: React.FC = () => {
   const hueRef = useRef<HTMLDivElement>(null);
   const [isDraggingGradient, setIsDraggingGradient] = useState(false);
   const [isDraggingHue, setIsDraggingHue] = useState(false);
-
-  const tabs = [
-    { id: "color", label: "Color" },
-    { id: "swatches", label: "Swatches" },
-  ];
 
   // Update RGB from HSB
   useEffect(() => {
@@ -118,13 +123,7 @@ export const ColorPickerPanel: React.FC = () => {
   const pureHueColor = hsbToRgb(hue, 100, 100);
 
   return (
-    <DraggablePanel
-      id="colorpicker"
-      title="Color"
-      tabs={tabs}
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-    >
+    <div className="h-full">
       {activeTab === "color" && (
         <div className="flex gap-2">
           {/* Foreground/Background swatches */}
@@ -215,7 +214,6 @@ export const ColorPickerPanel: React.FC = () => {
                 const h = (i * 3.75) % 360;
                 const s = 50 + (i % 4) * 15;
                 const l = 25 + (i % 5) * 12;
-                // Convert HSL to HSB approximately
                 setHue(Math.round(h));
                 setSaturation(Math.round(s));
                 setBrightness(Math.round(l + 25));
@@ -248,6 +246,6 @@ export const ColorPickerPanel: React.FC = () => {
           </span>
         </div>
       </div>
-    </DraggablePanel>
+    </div>
   );
 };
