@@ -6,6 +6,8 @@ interface PanelState {
   title: string;
   component: React.ReactNode;
   isFloating: boolean;
+  isClosed: boolean;
+  isCollapsed: boolean;
   position: { x: number; y: number };
   size: { width: number; height: number };
   order: number;
@@ -16,6 +18,9 @@ interface PanelContextType {
   setPanels: React.Dispatch<React.SetStateAction<PanelState[]>>;
   undockPanel: (id: string) => void;
   dockPanel: (id: string) => void;
+  closePanel: (id: string) => void;
+  openPanel: (id: string) => void;
+  toggleCollapsePanel: (id: string) => void;
   reorderPanels: (dragId: string, dropId: string) => void;
   updatePanelPosition: (id: string, x: number, y: number) => void;
   updatePanelSize: (id: string, width: number, height: number) => void;
@@ -36,7 +41,7 @@ export const PanelProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setPanels((prev) =>
       prev.map((p) =>
         p.id === id
-          ? { ...p, isFloating: true, position: { x: 400, y: 200 }, size: { width: 280, height: 200 } }
+          ? { ...p, isFloating: true, isClosed: false, position: { x: 400, y: 200 }, size: { width: 280, height: 200 } }
           : p
       )
     );
@@ -44,7 +49,25 @@ export const PanelProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const dockPanel = (id: string) => {
     setPanels((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, isFloating: false } : p))
+      prev.map((p) => (p.id === id ? { ...p, isFloating: false, isClosed: false } : p))
+    );
+  };
+
+  const closePanel = (id: string) => {
+    setPanels((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, isClosed: true, isFloating: false } : p))
+    );
+  };
+
+  const openPanel = (id: string) => {
+    setPanels((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, isClosed: false } : p))
+    );
+  };
+
+  const toggleCollapsePanel = (id: string) => {
+    setPanels((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, isCollapsed: !p.isCollapsed } : p))
     );
   };
 
@@ -79,7 +102,18 @@ export const PanelProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   return (
     <PanelContext.Provider
-      value={{ panels, setPanels, undockPanel, dockPanel, reorderPanels, updatePanelPosition, updatePanelSize }}
+      value={{
+        panels,
+        setPanels,
+        undockPanel,
+        dockPanel,
+        closePanel,
+        openPanel,
+        toggleCollapsePanel,
+        reorderPanels,
+        updatePanelPosition,
+        updatePanelSize,
+      }}
     >
       {children}
     </PanelContext.Provider>
@@ -218,23 +252,28 @@ interface DraggablePanelProps {
   id: string;
   title: string;
   children: React.ReactNode;
-  defaultExpanded?: boolean;
+  isCollapsed?: boolean;
   tabs?: { id: string; label: string }[];
   activeTab?: string;
   onTabChange?: (id: string) => void;
+  onClose?: () => void;
+  onUndock?: () => void;
+  onCollapse?: () => void;
 }
 
 export const DraggablePanel: React.FC<DraggablePanelProps> = ({
   id,
   title,
   children,
-  defaultExpanded = true,
+  isCollapsed = false,
   tabs,
   activeTab,
   onTabChange,
+  onClose,
+  onUndock,
+  onCollapse,
 }) => {
-  const { undockPanel, reorderPanels } = usePanelContext();
-  const [expanded, setExpanded] = useState(defaultExpanded);
+  const { reorderPanels } = usePanelContext();
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragStart = (e: React.DragEvent) => {
@@ -262,14 +301,14 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
   };
 
   const handleDoubleClick = () => {
-    undockPanel(id);
+    onUndock?.();
   };
 
   return (
     <div
-      className={`border-b border-border bg-panel flex flex-col h-full ${
+      className={`border-b border-border bg-panel flex flex-col ${
         isDragOver ? "border-t-2 border-t-accent" : ""
-      }`}
+      } ${isCollapsed ? "flex-shrink-0" : "flex-1 min-h-0"}`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -300,10 +339,18 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
           </div>
           <div className="flex-1 bg-background" />
           <button
-            onClick={() => setExpanded(!expanded)}
+            onClick={onCollapse}
             className="w-[18px] h-full bg-background border-l border-border-light flex items-center justify-center text-xs hover:bg-tool-hover"
+            title={isCollapsed ? "Expand" : "Collapse"}
           >
-            {expanded ? "▲" : "▼"}
+            {isCollapsed ? "▼" : "▲"}
+          </button>
+          <button
+            onClick={onClose}
+            className="w-[18px] h-full bg-background border-l border-border-light flex items-center justify-center text-xs hover:bg-tool-hover"
+            title="Close panel"
+          >
+            ×
           </button>
         </div>
       ) : (
@@ -315,20 +362,33 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
           title="Drag to reorder, double-click to undock"
         >
           <span className="text-xs font-medium flex-1">{title}</span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setExpanded(!expanded);
-            }}
-            className="text-xs hover:text-foreground"
-          >
-            {expanded ? "▲" : "▼"}
-          </button>
+          <div className="flex gap-0.5">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onCollapse?.();
+              }}
+              className="text-xs hover:text-foreground px-1"
+              title={isCollapsed ? "Expand" : "Collapse"}
+            >
+              {isCollapsed ? "▼" : "▲"}
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose?.();
+              }}
+              className="text-xs hover:text-foreground px-1"
+              title="Close panel"
+            >
+              ×
+            </button>
+          </div>
         </div>
       )}
 
       {/* Panel content */}
-      {expanded && <div className="p-2 flex-1 overflow-auto">{children}</div>}
+      {!isCollapsed && <div className="p-2 flex-1 overflow-auto min-h-0">{children}</div>}
     </div>
   );
 };

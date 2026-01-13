@@ -1,10 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { Panel as ResizablePanel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { DraggablePanel, FloatingWindow, usePanelContext } from "./DockablePanel";
 import { ColorPickerPanel } from "./ColorPickerPanel";
-import { HistoryPanel } from "./HistoryPanel";
-import { NavigatorPanel } from "./NavigatorPanel";
-import { ActionsPanel } from "./ActionsPanel";
+import { HistoryPanelContent } from "./HistoryPanel";
+import { NavigatorPanelContent } from "./NavigatorPanel";
+import { ActionsPanelContent } from "./ActionsPanel";
+import { PropertiesPanel } from "./PropertiesPanel";
+
+// Tool context for sharing selected tool state
+interface ToolContextType {
+  selectedTool: string;
+  setSelectedTool: (tool: string) => void;
+}
+
+const ToolContext = createContext<ToolContextType | null>(null);
+
+export const useToolContext = () => {
+  const context = useContext(ToolContext);
+  return context;
+};
+
+export const ToolProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [selectedTool, setSelectedTool] = useState("marquee");
+  return (
+    <ToolContext.Provider value={{ selectedTool, setSelectedTool }}>
+      {children}
+    </ToolContext.Provider>
+  );
+};
 
 // Character Panel Content
 const CharacterPanelContent: React.FC = () => (
@@ -112,100 +134,120 @@ const LayersPanelContent: React.FC = () => {
   );
 };
 
-const ResizeHandle: React.FC = () => (
-  <PanelResizeHandle className="h-1 bg-border-light hover:bg-accent cursor-row-resize flex items-center justify-center group">
-    <div className="w-8 h-0.5 bg-muted-foreground rounded opacity-50 group-hover:opacity-100" />
-  </PanelResizeHandle>
-);
-
 export const EnhancedRightDock: React.FC = () => {
-  const { panels, setPanels, dockPanel } = usePanelContext();
+  const { panels, setPanels, closePanel, openPanel, toggleCollapsePanel, undockPanel, dockPanel } = usePanelContext();
   const [activeLayerTab, setActiveLayerTab] = useState("layers");
+  const toolContext = useToolContext();
+  const selectedTool = toolContext?.selectedTool || "marquee";
 
   // Initialize panels
   useEffect(() => {
     setPanels([
-      { id: "colorpicker", title: "Color", component: null, isFloating: false, position: { x: 0, y: 0 }, size: { width: 280, height: 200 }, order: 0 },
-      { id: "layers", title: "Layers", component: null, isFloating: false, position: { x: 0, y: 0 }, size: { width: 280, height: 200 }, order: 1 },
-      { id: "history", title: "History", component: null, isFloating: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 2 },
-      { id: "navigator", title: "Navigator", component: null, isFloating: false, position: { x: 0, y: 0 }, size: { width: 280, height: 180 }, order: 3 },
-      { id: "actions", title: "Actions", component: null, isFloating: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 4 },
-      { id: "character", title: "Character", component: null, isFloating: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 5 },
+      { id: "colorpicker", title: "Color", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 200 }, order: 0 },
+      { id: "properties", title: "Properties", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 180 }, order: 1 },
+      { id: "layers", title: "Layers", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 200 }, order: 2 },
+      { id: "history", title: "History", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 3 },
+      { id: "navigator", title: "Navigator", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 180 }, order: 4 },
+      { id: "actions", title: "Actions", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 5 },
+      { id: "character", title: "Character", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 6 },
     ]);
   }, [setPanels]);
 
-  const dockedPanels = panels.filter((p) => !p.isFloating).sort((a, b) => a.order - b.order);
-  const floatingPanels = panels.filter((p) => p.isFloating);
+  const dockedPanels = panels.filter((p) => !p.isFloating && !p.isClosed).sort((a, b) => a.order - b.order);
+  const floatingPanels = panels.filter((p) => p.isFloating && !p.isClosed);
+  const closedPanels = panels.filter((p) => p.isClosed);
 
   // Render panel content based on ID
-  const renderPanelContent = (panelId: string) => {
-    switch (panelId) {
-      case "colorpicker":
-        return <ColorPickerPanel />;
-      case "layers":
-        return (
-          <DraggablePanel
-            id="layers"
-            title="Layers"
-            tabs={[
-              { id: "layers", label: "Layers" },
-              { id: "channels", label: "Channels" },
-              { id: "paths", label: "Paths" },
-            ]}
-            activeTab={activeLayerTab}
-            onTabChange={setActiveLayerTab}
-          >
-            {activeLayerTab === "layers" ? (
-              <LayersPanelContent />
-            ) : (
-              <div className="text-xs text-muted-foreground text-center py-2">
-                {activeLayerTab === "channels" ? "RGB, Red, Green, Blue" : "No paths"}
-              </div>
-            )}
-          </DraggablePanel>
-        );
-      case "history":
-        return <HistoryPanel />;
-      case "navigator":
-        return <NavigatorPanel />;
-      case "actions":
-        return <ActionsPanel />;
-      case "character":
-        return (
-          <DraggablePanel id="character" title="Character">
-            <CharacterPanelContent />
-          </DraggablePanel>
-        );
-      default:
-        return null;
-    }
-  };
+  const renderPanelContent = (panelId: string, isFloating: boolean = false) => {
+    const panel = panels.find(p => p.id === panelId);
+    const isCollapsed = panel?.isCollapsed || false;
 
-  // Calculate panel sizes based on count
-  const getPanelSize = (index: number, total: number) => {
-    if (total <= 3) return 100 / total;
-    if (index < 2) return 25; // First two panels get 25%
-    return 50 / (total - 2); // Rest share remaining 50%
+    const content = (() => {
+      switch (panelId) {
+        case "colorpicker":
+          return <ColorPickerPanel />;
+        case "properties":
+          return <PropertiesPanel selectedTool={selectedTool} selectedLayer="Background" />;
+        case "layers":
+          return (
+            <>
+              {activeLayerTab === "layers" ? (
+                <LayersPanelContent />
+              ) : (
+                <div className="text-xs text-muted-foreground text-center py-2">
+                  {activeLayerTab === "channels" ? "RGB, Red, Green, Blue" : "No paths"}
+                </div>
+              )}
+            </>
+          );
+        case "history":
+          return <HistoryPanelContent />;
+        case "navigator":
+          return <NavigatorPanelContent />;
+        case "actions":
+          return <ActionsPanelContent />;
+        case "character":
+          return <CharacterPanelContent />;
+        default:
+          return null;
+      }
+    })();
+
+    if (isFloating) return content;
+
+    const tabs = panelId === "layers" ? [
+      { id: "layers", label: "Layers" },
+      { id: "channels", label: "Channels" },
+      { id: "paths", label: "Paths" },
+    ] : undefined;
+
+    return (
+      <DraggablePanel
+        id={panelId}
+        title={panel?.title || panelId}
+        tabs={tabs}
+        activeTab={tabs ? activeLayerTab : undefined}
+        onTabChange={tabs ? setActiveLayerTab : undefined}
+        isCollapsed={isCollapsed}
+        onClose={() => closePanel(panelId)}
+        onUndock={() => undockPanel(panelId)}
+        onCollapse={() => toggleCollapsePanel(panelId)}
+      >
+        {content}
+      </DraggablePanel>
+    );
   };
 
   return (
     <>
       <div className="w-dock-w bg-panel border-l border-border flex flex-col overflow-hidden">
-        <PanelGroup direction="vertical" className="flex-1">
-          {dockedPanels.map((panel, index) => (
-            <React.Fragment key={panel.id}>
-              {index > 0 && <ResizeHandle />}
-              <ResizablePanel 
-                defaultSize={getPanelSize(index, dockedPanels.length)} 
-                minSize={8}
-              >
-                <div className="h-full overflow-auto">
-                  {renderPanelContent(panel.id)}
-                </div>
-              </ResizablePanel>
-            </React.Fragment>
+        {/* Closed panels menu */}
+        {closedPanels.length > 0 && (
+          <div className="px-2 py-1 border-b border-border-light bg-panel-header">
+            <div className="flex items-center gap-1 flex-wrap">
+              <span className="text-2xs text-muted-foreground">Closed:</span>
+              {closedPanels.map((panel) => (
+                <button
+                  key={panel.id}
+                  onClick={() => openPanel(panel.id)}
+                  className="px-1.5 py-0.5 text-2xs bg-background border border-border rounded hover:bg-tool-hover"
+                  title={`Open ${panel.title}`}
+                >
+                  {panel.title}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Docked panels - flex layout for auto-sizing */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {dockedPanels.map((panel) => (
+            <div key={panel.id} className={`${panel.isCollapsed ? 'flex-shrink-0' : 'flex-1 min-h-0'} overflow-hidden`}>
+              {renderPanelContent(panel.id)}
+            </div>
           ))}
-        </PanelGroup>
+        </div>
       </div>
 
       {/* Floating windows */}
@@ -216,10 +258,12 @@ export const EnhancedRightDock: React.FC = () => {
           title={panel.title}
           position={panel.position}
           size={panel.size}
-          onClose={() => dockPanel(panel.id)}
+          onClose={() => closePanel(panel.id)}
           onDock={() => dockPanel(panel.id)}
         >
-          {renderPanelContent(panel.id)}
+          <div className="p-2 h-full overflow-auto">
+            {renderPanelContent(panel.id, true)}
+          </div>
         </FloatingWindow>
       ))}
     </>

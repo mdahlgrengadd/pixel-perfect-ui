@@ -88,7 +88,11 @@ const CursorIndicator: React.FC<{
 export const DocumentCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [cursorPos, setCursorPos] = useState({ x: -1, y: -1 });
+  const [absoluteCursorPos, setAbsoluteCursorPos] = useState({ x: -1, y: -1 });
   const [rulerLength, setRulerLength] = useState({ h: 1200, v: 900 });
+  const [brushSize] = useState(30);
+  const [brushHardness] = useState(100);
+  const [showBrushPreview] = useState(true); // Show when brush tool active
 
   useEffect(() => {
     const updateRulerLength = () => {
@@ -112,15 +116,25 @@ export const DocumentCanvas: React.FC = () => {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       });
+      setAbsoluteCursorPos({ x: e.clientX, y: e.clientY });
     }
   };
 
   const handleMouseLeave = () => {
     setCursorPos({ x: -1, y: -1 });
+    setAbsoluteCursorPos({ x: -1, y: -1 });
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-workspace overflow-hidden">
+    <div className="flex-1 flex flex-col bg-workspace overflow-hidden relative">
+      {/* Brush preview overlay */}
+      <BrushPreview
+        visible={showBrushPreview && absoluteCursorPos.x > 0}
+        x={absoluteCursorPos.x}
+        y={absoluteCursorPos.y}
+        size={brushSize}
+        hardness={brushHardness}
+      />
       {/* Document tabs */}
       <DocumentTabs />
       

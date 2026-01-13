@@ -3,7 +3,7 @@ import { MenuBar } from "./MenuBar";
 import { ToolOptionsBar } from "./ToolOptionsBar";
 import { ToolsPalette } from "./ToolsPalette";
 import { DocumentCanvas } from "./DocumentCanvas";
-import { EnhancedRightDock } from "./EnhancedRightDock";
+import { EnhancedRightDock, ToolProvider } from "./EnhancedRightDock";
 import { ReferenceOverlay, useReferenceMode } from "./ReferenceOverlay";
 import { PanelProvider } from "./DockablePanel";
 import { ThemeProvider } from "./ThemeToggle";
@@ -14,6 +14,7 @@ export const PhotoshopUI: React.FC = () => {
   return (
     <ThemeProvider>
       <PanelProvider>
+        <ToolProvider>
         <div className="min-w-app h-screen flex flex-col bg-background overflow-hidden">
           {/* Reference overlay for pixel alignment */}
           <ReferenceOverlay isActive={referenceActive} />
@@ -43,6 +44,7 @@ export const PhotoshopUI: React.FC = () => {
             <span>Press R to toggle reference overlay | Double-click panel header to undock</span>
           </div>
         </div>
+        </ToolProvider>
       </PanelProvider>
     </ThemeProvider>
   );
