@@ -15,35 +15,35 @@ export const RightDock: React.FC = () => {
   return (
     <div className="w-dock-w bg-panel border-l border-border flex flex-col overflow-hidden">
       <PanelGroup direction="vertical" className="flex-1">
-        <Panel defaultSize={20} minSize={10}>
+        <ResizablePanel defaultSize={20} minSize={10}>
           <div className="h-full overflow-auto">
             <ColorPanel />
           </div>
-        </Panel>
+        </ResizablePanel>
         
         <ResizeHandle />
         
-        <Panel defaultSize={30} minSize={10}>
+        <ResizablePanel defaultSize={30} minSize={10}>
           <div className="h-full overflow-auto">
             <CharacterPanel />
           </div>
-        </Panel>
+        </ResizablePanel>
         
         <ResizeHandle />
         
-        <Panel defaultSize={15} minSize={8}>
+        <ResizablePanel defaultSize={15} minSize={8}>
           <div className="h-full overflow-auto">
             <ParagraphPanel />
           </div>
-        </Panel>
+        </ResizablePanel>
         
         <ResizeHandle />
         
-        <Panel defaultSize={35} minSize={15}>
+        <ResizablePanel defaultSize={35} minSize={15}>
           <div className="h-full overflow-auto">
             <LayersPanel />
           </div>
-        </Panel>
+        </ResizablePanel>
       </PanelGroup>
     </div>
   );
