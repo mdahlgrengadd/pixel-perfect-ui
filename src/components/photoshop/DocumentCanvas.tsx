@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { DocumentTabs } from "./DocumentTabs";
 
 // Generate ruler tick marks with proper spacing like Photoshop
 const RulerTicks: React.FC<{ orientation: "horizontal" | "vertical"; length: number }> = ({
@@ -120,6 +121,9 @@ export const DocumentCanvas: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col bg-workspace overflow-hidden">
+      {/* Document tabs */}
+      <DocumentTabs />
+      
       {/* Rulers and canvas area */}
       <div className="flex flex-1">
         {/* Vertical ruler */}
