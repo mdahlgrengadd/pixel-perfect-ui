@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Classic Adobe Photoshop UI Design System */
+/* Adobe Photoshop UI Design System */
 /* All colors in HSL for Tailwind compatibility */
 
 @layer base {
+  /* Classic Photoshop Gray Theme (Default) */
   :root {
-    /* Classic Photoshop Gray Theme */
     --background: 0 0% 82%; /* #d0d0d0 - main app background */
     --foreground: 0 0% 7%; /* #111 - primary text */
     
@@ -52,14 +52,19 @@
     --document-shadow: 0 0% 30%;
     
     /* Rulers */
-    --ruler: 0 0% 28%; /* Dark ruler like reference */
+    --ruler: 0 0% 28%;
     --ruler-foreground: 0 0% 65%;
     --ruler-tick: 0 0% 55%;
-    --ruler-cursor: 0 0% 100%; /* White cursor indicator */
+    --ruler-cursor: 0 0% 100%;
     
     /* Swatches */
     --swatch-foreground: 0 0% 0%;
     --swatch-background: 0 0% 100%;
+    
+    /* Tab bar */
+    --tab-bar: 0 0% 75%;
+    --tab-active: 0 0% 50%;
+    --tab-inactive: 0 0% 35%;
     
     --radius: 1px;
     
@@ -87,6 +92,75 @@
     --tool-button-size: 26px;
     --panel-header-height: 22px;
     --tab-height: 20px;
+    
+    /* Theme mode flag */
+    --is-modern: 0;
+  }
+
+  /* Modern Dark Photoshop CC Theme */
+  .dark {
+    --background: 0 0% 20%; /* #333 - main app background */
+    --foreground: 0 0% 90%; /* #e6e6e6 - primary text */
+    
+    --panel: 0 0% 18%; /* #2e2e2e - panel surfaces */
+    --panel-foreground: 0 0% 85%;
+    
+    --workspace: 0 0% 15%; /* #262626 - canvas workspace area */
+    --workspace-foreground: 0 0% 75%;
+    
+    --border: 0 0% 12%; /* #1f1f1f - main borders */
+    --border-light: 0 0% 25%; /* #404040 - inner dividers */
+    --border-dark: 0 0% 8%; /* #141414 - darker borders */
+    
+    --input: 0 0% 12%; /* dark input backgrounds */
+    --input-foreground: 0 0% 90%;
+    
+    --muted: 0 0% 25%; /* #404040 */
+    --muted-foreground: 0 0% 55%; /* #8c8c8c - inactive text */
+    
+    --accent: 207 90% 54%; /* #2d9cdb - blue selection */
+    --accent-foreground: 0 0% 100%;
+    
+    --highlight: 0 0% 30%; /* subtle highlight */
+    --shadow: 0 0% 5%; /* shadow color */
+    
+    /* Panel-specific */
+    --panel-header: 0 0% 22%;
+    --panel-header-foreground: 0 0% 85%;
+    
+    --menu-hover: 207 90% 45%;
+    --menu-hover-foreground: 0 0% 100%;
+    
+    --tool-active: 207 90% 40%;
+    --tool-hover: 0 0% 28%;
+    
+    --layer-selected: 207 60% 35%;
+    --layer-selected-foreground: 0 0% 100%;
+    
+    /* Document */
+    --document: 0 0% 0%;
+    --document-foreground: 0 0% 100%;
+    --document-shadow: 0 0% 0%;
+    
+    /* Rulers */
+    --ruler: 0 0% 22%;
+    --ruler-foreground: 0 0% 50%;
+    --ruler-tick: 0 0% 40%;
+    --ruler-cursor: 207 90% 54%;
+    
+    /* Swatches */
+    --swatch-foreground: 0 0% 100%;
+    --swatch-background: 0 0% 0%;
+    
+    /* Tab bar */
+    --tab-bar: 0 0% 15%;
+    --tab-active: 0 0% 22%;
+    --tab-inactive: 0 0% 15%;
+    
+    --radius: 3px;
+    
+    /* Theme mode flag */
+    --is-modern: 1;
   }
 }
 
@@ -143,12 +217,23 @@
       2px 2px 4px hsl(var(--document-shadow) / 0.4),
       4px 4px 8px hsl(var(--document-shadow) / 0.2);
   }
+  
+  /* Modern flat style (only applies in dark mode) */
+  .dark .inset-input,
+  .dark .raised,
+  .dark .pressed {
+    box-shadow: none;
+  }
+  
+  .dark .doc-shadow {
+    box-shadow: 0 4px 20px hsl(0 0% 0% / 0.5);
+  }
 }
 
-/* Scrollbar styling for classic look */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -157,16 +242,28 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--background));
+  background: hsl(var(--muted));
   border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted));
+  background: hsl(var(--muted-foreground));
 }
 
 ::-webkit-scrollbar-corner {
   background: hsl(var(--panel));
+}
+
+/* Dark mode scrollbar */
+.dark::-webkit-scrollbar-thumb {
+  background: hsl(0 0% 35%);
+  border: none;
+}
+
+.dark::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+  border: none;
 }
 
 /* Fluent UI overrides for classic look */
@@ -176,7 +273,7 @@ fluent-button {
   --accent-fill-active: hsl(var(--tool-active));
   --neutral-fill-rest: hsl(var(--panel));
   --neutral-stroke-rest: hsl(var(--border));
-  --control-corner-radius: 0px;
+  --control-corner-radius: var(--radius);
 }
 
 fluent-tabs {
@@ -185,4 +282,12 @@ fluent-tabs {
 
 fluent-slider {
   --accent-foreground-rest: hsl(var(--foreground));
+}
+
+/* Dark mode fluent overrides */
+.dark fluent-button {
+  --accent-fill-rest: hsl(var(--panel));
+  --accent-fill-hover: hsl(var(--tool-hover));
+  --neutral-fill-rest: hsl(var(--input));
+  --neutral-stroke-rest: hsl(var(--border));
 }
