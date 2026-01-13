@@ -2,104 +2,186 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Classic Adobe Photoshop UI Design System */
+/* All colors in HSL for Tailwind compatibility */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Classic Photoshop Gray Theme */
+    --background: 0 0% 82%; /* #d0d0d0 - main app background */
+    --foreground: 0 0% 7%; /* #111 - primary text */
+    
+    --panel: 0 0% 89%; /* #e3e3e3 - panel surfaces */
+    --panel-foreground: 0 0% 7%;
+    
+    --workspace: 0 0% 50%; /* #808080 - canvas workspace area */
+    --workspace-foreground: 0 0% 100%;
+    
+    --border: 0 0% 60%; /* #9a9a9a - main borders */
+    --border-light: 0 0% 71%; /* #b5b5b5 - inner dividers */
+    --border-dark: 0 0% 45%; /* #737373 - darker borders */
+    
+    --input: 0 0% 100%; /* white input backgrounds */
+    --input-foreground: 0 0% 7%;
+    
+    --muted: 0 0% 75%; /* #bfbfbf */
+    --muted-foreground: 0 0% 27%; /* #444 - inactive text */
+    
+    --accent: 210 60% 45%; /* blue selection */
+    --accent-foreground: 0 0% 100%;
+    
+    --highlight: 0 0% 95%; /* light highlight */
+    --shadow: 0 0% 40%; /* shadow color */
+    
+    /* Panel-specific */
+    --panel-header: 0 0% 85%;
+    --panel-header-foreground: 0 0% 7%;
+    
+    --menu-hover: 210 60% 50%;
+    --menu-hover-foreground: 0 0% 100%;
+    
+    --tool-active: 0 0% 70%;
+    --tool-hover: 0 0% 78%;
+    
+    --layer-selected: 210 50% 70%;
+    --layer-selected-foreground: 0 0% 7%;
+    
+    /* Document */
+    --document: 0 0% 100%;
+    --document-foreground: 0 0% 7%;
+    --document-shadow: 0 0% 30%;
+    
+    /* Rulers */
+    --ruler: 0 0% 95%;
+    --ruler-foreground: 0 0% 40%;
+    --ruler-tick: 0 0% 50%;
+    
+    /* Swatches */
+    --swatch-foreground: 0 0% 0%;
+    --swatch-background: 0 0% 100%;
+    
+    --radius: 1px;
+    
+    /* Typography */
+    --font-ui: "Segoe UI", "Tahoma", "Arial", sans-serif;
+    --font-size-xs: 10px;
+    --font-size-sm: 11px;
+    --font-size-base: 12px;
+    --line-height-compact: 1.2;
+    
+    /* Spacing */
+    --space-1: 1px;
+    --space-2: 2px;
+    --space-3: 3px;
+    --space-4: 4px;
+    --space-6: 6px;
+    --space-8: 8px;
+    
+    /* Layout dimensions */
+    --menu-height: 24px;
+    --options-height: 34px;
+    --tools-width: 54px;
+    --dock-width: 300px;
+    --ruler-size: 20px;
+    --tool-button-size: 26px;
+    --panel-header-height: 22px;
+    --tab-height: 20px;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-ui);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-compact);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    user-select: none;
   }
+}
+
+/* Classic UI Utilities */
+@layer utilities {
+  /* Inset border effect for inputs */
+  .inset-input {
+    box-shadow: 
+      inset 1px 1px 0 hsl(var(--shadow)),
+      inset -1px -1px 0 hsl(var(--highlight));
+  }
+  
+  /* Raised button effect */
+  .raised {
+    box-shadow: 
+      inset -1px -1px 0 hsl(var(--shadow)),
+      inset 1px 1px 0 hsl(var(--highlight));
+  }
+  
+  /* Pressed button effect */
+  .pressed {
+    box-shadow: 
+      inset 1px 1px 0 hsl(var(--shadow)),
+      inset -1px -1px 0 hsl(var(--highlight));
+  }
+  
+  /* Panel groove */
+  .groove {
+    box-shadow: 
+      inset 0 1px 0 hsl(var(--shadow)),
+      0 1px 0 hsl(var(--highlight));
+  }
+  
+  /* Document shadow */
+  .doc-shadow {
+    box-shadow: 
+      2px 2px 4px hsl(var(--document-shadow) / 0.4),
+      4px 4px 8px hsl(var(--document-shadow) / 0.2);
+  }
+}
+
+/* Scrollbar styling for classic look */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--panel));
+  border: 1px solid hsl(var(--border));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-corner {
+  background: hsl(var(--panel));
+}
+
+/* Fluent UI overrides for classic look */
+fluent-button {
+  --accent-fill-rest: hsl(var(--background));
+  --accent-fill-hover: hsl(var(--tool-hover));
+  --accent-fill-active: hsl(var(--tool-active));
+  --neutral-fill-rest: hsl(var(--panel));
+  --neutral-stroke-rest: hsl(var(--border));
+  --control-corner-radius: 0px;
+}
+
+fluent-tabs {
+  --neutral-fill-rest: hsl(var(--panel));
+}
+
+fluent-slider {
+  --accent-foreground-rest: hsl(var(--foreground));
 }
