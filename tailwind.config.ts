@@ -49,6 +49,7 @@ export default {
           DEFAULT: "hsl(var(--ruler))",
           foreground: "hsl(var(--ruler-foreground))",
           tick: "hsl(var(--ruler-tick))",
+          cursor: "hsl(var(--ruler-cursor))",
         },
         swatch: {
           foreground: "hsl(var(--swatch-foreground))",
