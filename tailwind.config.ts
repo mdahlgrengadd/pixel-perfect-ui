@@ -15,21 +15,20 @@ export default {
     extend: {
       colors: {
         border: "hsl(var(--border))",
+        "border-light": "hsl(var(--border-light))",
+        "border-dark": "hsl(var(--border-dark))",
         input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        ring: "hsl(var(--accent))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+        panel: {
+          DEFAULT: "hsl(var(--panel))",
+          foreground: "hsl(var(--panel-foreground))",
+          header: "hsl(var(--panel-header))",
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+        workspace: {
+          DEFAULT: "hsl(var(--workspace))",
+          foreground: "hsl(var(--workspace-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -39,51 +38,67 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+        highlight: "hsl(var(--highlight))",
+        shadow: "hsl(var(--shadow))",
+        document: {
+          DEFAULT: "hsl(var(--document))",
+          foreground: "hsl(var(--document-foreground))",
+          shadow: "hsl(var(--document-shadow))",
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+        ruler: {
+          DEFAULT: "hsl(var(--ruler))",
+          foreground: "hsl(var(--ruler-foreground))",
+          tick: "hsl(var(--ruler-tick))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+        swatch: {
+          foreground: "hsl(var(--swatch-foreground))",
+          background: "hsl(var(--swatch-background))",
         },
+        tool: {
+          active: "hsl(var(--tool-active))",
+          hover: "hsl(var(--tool-hover))",
+        },
+        layer: {
+          selected: "hsl(var(--layer-selected))",
+          "selected-foreground": "hsl(var(--layer-selected-foreground))",
+        },
+        menu: {
+          hover: "hsl(var(--menu-hover))",
+          "hover-foreground": "hsl(var(--menu-hover-foreground))",
+        },
+      },
+      fontFamily: {
+        ui: ["Segoe UI", "Tahoma", "Arial", "sans-serif"],
+      },
+      fontSize: {
+        "2xs": "10px",
+        xs: "11px",
+        sm: "12px",
+      },
+      spacing: {
+        "menu-h": "var(--menu-height)",
+        "options-h": "var(--options-height)",
+        "tools-w": "var(--tools-width)",
+        "dock-w": "var(--dock-width)",
+        "ruler": "var(--ruler-size)",
+        "tool-btn": "var(--tool-button-size)",
+        "panel-header": "var(--panel-header-height)",
+        "tab-h": "var(--tab-height)",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        none: "0px",
+        sm: "1px",
+        DEFAULT: "1px",
+        md: "2px",
       },
-      keyframes: {
-        "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
-        },
-        "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
-        },
+      boxShadow: {
+        inset: "inset 1px 1px 0 hsl(var(--shadow)), inset -1px -1px 0 hsl(var(--highlight))",
+        raised: "inset -1px -1px 0 hsl(var(--shadow)), inset 1px 1px 0 hsl(var(--highlight))",
+        pressed: "inset 1px 1px 0 hsl(var(--shadow)), inset -1px -1px 0 hsl(var(--highlight))",
+        doc: "2px 2px 4px hsl(var(--document-shadow) / 0.4), 4px 4px 8px hsl(var(--document-shadow) / 0.2)",
       },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+      minWidth: {
+        app: "980px",
       },
     },
   },
