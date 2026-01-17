@@ -1,10 +1,6 @@
-import { createRoot } from 'react-dom/client';
+// Bootstrap file for Module Federation remote
 import App from './App';
 import './index.css';
 
-const root = document.getElementById('root');
-if (root) {
-  createRoot(root).render(<App />);
-}
-
+// Export the App component for Module Federation
 export default App;
