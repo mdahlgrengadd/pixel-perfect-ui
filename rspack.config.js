@@ -61,6 +61,8 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@src': path.resolve(__dirname, './src'),
       '@shared/ui-kit$': path.resolve(__dirname, '../../packages/shared-ui-kit/src/index.ts'),
       '@shared/api-client$': path.resolve(__dirname, '../../packages/shared-api-client/src/index.ts'),
       '@shared/system-api$': path.resolve(__dirname, '../../packages/shared-system-api/src/index.ts'),
