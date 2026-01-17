@@ -34,8 +34,19 @@ export const usePanelContext = () => {
   return context;
 };
 
+// Default panels configuration
+const DEFAULT_PANELS: PanelState[] = [
+  { id: "colorpicker", title: "Color", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 200 }, order: 0 },
+  { id: "properties", title: "Properties", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 180 }, order: 1 },
+  { id: "layers", title: "Layers", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 200 }, order: 2 },
+  { id: "history", title: "History", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 3 },
+  { id: "navigator", title: "Navigator", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 180 }, order: 4 },
+  { id: "actions", title: "Actions", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 5 },
+  { id: "character", title: "Character", component: null, isFloating: false, isClosed: false, isCollapsed: false, position: { x: 0, y: 0 }, size: { width: 280, height: 150 }, order: 6 },
+];
+
 export const PanelProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [panels, setPanels] = useState<PanelState[]>([]);
+  const [panels, setPanels] = useState<PanelState[]>(DEFAULT_PANELS);
 
   const undockPanel = (id: string) => {
     setPanels((prev) =>

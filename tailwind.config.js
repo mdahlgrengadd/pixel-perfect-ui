@@ -3,24 +3,24 @@ module.exports = {
   theme: {
     extend: {
       spacing: {
-        'dock-w': 'var(--spacing-dock-w, 280px)',
-        'tools-w': 'var(--spacing-tools-w, 66px)',
-        'menu-h': 'var(--spacing-menu-h, 24px)',
-        'options-h': 'var(--spacing-options-h, 36px)',
-        'tab-h': 'var(--spacing-tab-h, 18px)',
-        'panel-header': 'var(--spacing-panel-header, 18px)',
+        'dock-w': '300px',
+        'tools-w': '54px',
+        'menu-h': '24px',
+        'options-h': '34px',
+        'tab-h': '20px',
+        'panel-header': '22px',
       },
       minWidth: {
-        'app': 'var(--min-width-app, 980px)',
+        'app': '980px',
       },
       width: {
-        'dock-w': 'var(--spacing-dock-w, 280px)',
-        'tools-w': 'var(--spacing-tools-w, 66px)',
+        'dock-w': '300px',
+        'tools-w': '54px',
       },
       height: {
-        'menu': 'var(--spacing-menu-h, 24px)',
-        'options': 'var(--spacing-options-h, 36px)',
-        'tab': 'var(--spacing-tab-h, 18px)',
+        'menu': '24px',
+        'options': '34px',
+        'tab': '20px',
       },
       colors: {
         'background': 'hsl(var(--background))',
