@@ -29,10 +29,10 @@ export const PhotoshopUI: React.FC = () => {
           <div className="flex flex-1 overflow-hidden">
             {/* Left tools palette */}
             <ToolsPalette />
-            
+
             {/* Central document canvas */}
             <DocumentCanvas />
-            
+
             {/* Right dock panels */}
             <EnhancedRightDock />
           </div>
