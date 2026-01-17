@@ -11,7 +11,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <Index />
+      <div className="w-full h-full flex flex-col">
+        <Index />
+      </div>
     </TooltipProvider>
   </QueryClientProvider>
 );

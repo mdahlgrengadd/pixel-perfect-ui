@@ -15,7 +15,7 @@ export const PhotoshopUI: React.FC = () => {
     <ThemeProvider>
       <PanelProvider>
         <ToolProvider>
-        <div className="min-w-app h-screen flex flex-col bg-background overflow-hidden">
+        <div className="min-w-app h-full flex flex-col bg-background overflow-hidden">
           {/* Reference overlay for pixel alignment */}
           <ReferenceOverlay isActive={referenceActive} />
           
