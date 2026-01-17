@@ -117,11 +117,11 @@ const tools: Tool[] = [
     ]
   },
   { 
-    id: "blur", 
+    id: "blur-sm", 
     icon: ToolIcons.blur, 
     title: "Blur Tool",
     subtools: [
-      { id: "blur", icon: ToolIcons.blur, title: "Blur Tool" },
+      { id: "blur-sm", icon: ToolIcons.blur, title: "Blur Tool" },
       { id: "sharpen", icon: ToolIcons.sharpen, title: "Sharpen Tool" },
       { id: "smudge", icon: ToolIcons.smudge, title: "Smudge Tool" },
     ]

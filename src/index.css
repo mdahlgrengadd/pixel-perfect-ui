@@ -1,6 +1,185 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-border-light: hsl(var(--border-light));
+  --color-border-dark: hsl(var(--border-dark));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--accent));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-panel: hsl(var(--panel));
+  --color-panel-foreground: hsl(var(--panel-foreground));
+  --color-panel-header: hsl(var(--panel-header));
+
+  --color-workspace: hsl(var(--workspace));
+  --color-workspace-foreground: hsl(var(--workspace-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-highlight: hsl(var(--highlight));
+  --color-shadow: hsl(var(--shadow));
+
+  --color-document: hsl(var(--document));
+  --color-document-foreground: hsl(var(--document-foreground));
+  --color-document-shadow: hsl(var(--document-shadow));
+
+  --color-ruler: hsl(var(--ruler));
+  --color-ruler-foreground: hsl(var(--ruler-foreground));
+  --color-ruler-tick: hsl(var(--ruler-tick));
+  --color-ruler-cursor: hsl(var(--ruler-cursor));
+
+  --color-swatch-foreground: hsl(var(--swatch-foreground));
+  --color-swatch-background: hsl(var(--swatch-background));
+
+  --color-tool-active: hsl(var(--tool-active));
+  --color-tool-hover: hsl(var(--tool-hover));
+
+  --color-layer-selected: hsl(var(--layer-selected));
+  --color-layer-selected-foreground: hsl(var(--layer-selected-foreground));
+
+  --color-menu-hover: hsl(var(--menu-hover));
+  --color-menu-hover-foreground: hsl(var(--menu-hover-foreground));
+
+  --color-tab-bar: hsl(var(--tab-bar));
+  --color-tab-active: hsl(var(--tab-active));
+  --color-tab-inactive: hsl(var(--tab-inactive));
+
+  --font-ui: Segoe UI, Tahoma, Arial, sans-serif;
+
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+
+  --spacing-menu-h: var(--menu-height);
+  --spacing-options-h: var(--options-height);
+  --spacing-tools-w: var(--tools-width);
+  --spacing-dock-w: var(--dock-width);
+  --spacing-ruler: var(--ruler-size);
+  --spacing-tool-btn: var(--tool-button-size);
+  --spacing-panel-header: var(--panel-header-height);
+  --spacing-tab-h: var(--tab-height);
+
+  --radius-none: 0px;
+  --radius-sm: 1px;
+  --radius: 1px;
+  --radius-md: 2px;
+
+  --shadow-inset:
+    inset 1px 1px 0 hsl(var(--shadow)), inset -1px -1px 0 hsl(var(--highlight));
+  --shadow-raised:
+    inset -1px -1px 0 hsl(var(--shadow)), inset 1px 1px 0 hsl(var(--highlight));
+  --shadow-pressed:
+    inset 1px 1px 0 hsl(var(--shadow)), inset -1px -1px 0 hsl(var(--highlight));
+  --shadow-doc:
+    2px 2px 4px hsl(var(--document-shadow) / 0.4),
+    4px 4px 8px hsl(var(--document-shadow) / 0.2);
+
+  --min-width-app: 980px;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+/* Classic UI Utilities */
+@utility inset-input {
+  /* Inset border effect for inputs */
+  box-shadow:
+    inset 1px 1px 0 hsl(var(--shadow)),
+    inset -1px -1px 0 hsl(var(--highlight));
+
+  /* Modern flat style (only applies in dark mode) */
+  .dark & {
+    box-shadow: none;
+  }
+}
+@utility raised {
+  /* Raised button effect */
+  box-shadow:
+    inset -1px -1px 0 hsl(var(--shadow)),
+    inset 1px 1px 0 hsl(var(--highlight));
+
+  .dark & {
+    box-shadow: none;
+  }
+}
+@utility pressed {
+  /* Pressed button effect */
+  box-shadow:
+    inset 1px 1px 0 hsl(var(--shadow)),
+    inset -1px -1px 0 hsl(var(--highlight));
+
+  .dark & {
+    box-shadow: none;
+  }
+}
+@utility groove {
+  /* Panel groove */
+  box-shadow:
+    inset 0 1px 0 hsl(var(--shadow)),
+    0 1px 0 hsl(var(--highlight));
+}
+@utility doc-shadow {
+  /* Document shadow */
+  box-shadow:
+    2px 2px 4px hsl(var(--document-shadow) / 0.4),
+    4px 4px 8px hsl(var(--document-shadow) / 0.2);
+
+  .dark & {
+    box-shadow: 0 4px 20px hsl(0 0% 0% / 0.5);
+  }
+}
+@utility dark {
+  /* Modern flat style (only applies in dark mode) */
+  & .inset-input {
+    box-shadow: none;
+  }
+  & .raised {
+    box-shadow: none;
+  }
+  & .pressed {
+    box-shadow: none;
+  }
+
+  & .doc-shadow {
+    box-shadow: 0 4px 20px hsl(0 0% 0% / 0.5);
+  }
+}
 
 /* Adobe Photoshop UI Design System */
 /* All colors in HSL for Tailwind compatibility */
@@ -178,55 +357,6 @@
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
     user-select: none;
-  }
-}
-
-/* Classic UI Utilities */
-@layer utilities {
-  /* Inset border effect for inputs */
-  .inset-input {
-    box-shadow: 
-      inset 1px 1px 0 hsl(var(--shadow)),
-      inset -1px -1px 0 hsl(var(--highlight));
-  }
-  
-  /* Raised button effect */
-  .raised {
-    box-shadow: 
-      inset -1px -1px 0 hsl(var(--shadow)),
-      inset 1px 1px 0 hsl(var(--highlight));
-  }
-  
-  /* Pressed button effect */
-  .pressed {
-    box-shadow: 
-      inset 1px 1px 0 hsl(var(--shadow)),
-      inset -1px -1px 0 hsl(var(--highlight));
-  }
-  
-  /* Panel groove */
-  .groove {
-    box-shadow: 
-      inset 0 1px 0 hsl(var(--shadow)),
-      0 1px 0 hsl(var(--highlight));
-  }
-  
-  /* Document shadow */
-  .doc-shadow {
-    box-shadow: 
-      2px 2px 4px hsl(var(--document-shadow) / 0.4),
-      4px 4px 8px hsl(var(--document-shadow) / 0.2);
-  }
-  
-  /* Modern flat style (only applies in dark mode) */
-  .dark .inset-input,
-  .dark .raised,
-  .dark .pressed {
-    box-shadow: none;
-  }
-  
-  .dark .doc-shadow {
-    box-shadow: 0 4px 20px hsl(0 0% 0% / 0.5);
   }
 }
 

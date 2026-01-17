@@ -52,10 +52,10 @@ export const BrushPreview: React.FC<BrushPreviewProps> = ({
       />
       {/* Center crosshair */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[1px] h-2 bg-white/60" />
+        <div className="w-px h-2 bg-white/60" />
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-2 h-[1px] bg-white/60" />
+        <div className="w-2 h-px bg-white/60" />
       </div>
     </div>
   );

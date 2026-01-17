@@ -5,7 +5,7 @@ declare global {
     interface IntrinsicElements {
       "fluent-button": React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLElement> & {
-          appearance?: "accent" | "lightweight" | "neutral" | "outline" | "stealth";
+          appearance?: "accent" | "lightweight" | "neutral" | "outline-solid" | "stealth";
           disabled?: boolean;
         },
         HTMLElement

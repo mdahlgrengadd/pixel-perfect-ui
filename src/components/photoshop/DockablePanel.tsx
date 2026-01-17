@@ -308,7 +308,7 @@ export const DraggablePanel: React.FC<DraggablePanelProps> = ({
     <div
       className={`border-b border-border bg-panel flex flex-col ${
         isDragOver ? "border-t-2 border-t-accent" : ""
-      } ${isCollapsed ? "flex-shrink-0" : "flex-1 min-h-0"}`}
+      } ${isCollapsed ? "shrink-0" : "flex-1 min-h-0"}`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}

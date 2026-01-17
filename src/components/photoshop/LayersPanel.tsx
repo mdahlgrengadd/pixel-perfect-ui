@@ -150,7 +150,7 @@ export const LayersPanel: React.FC = () => {
                 
                 {/* Layer thumbnail */}
                 <div className="w-10 h-7 bg-swatch-background border border-border flex items-center justify-center shrink-0">
-                  <div className="w-8 h-5 bg-gradient-to-br from-gray-100 to-gray-300 border border-gray-400" />
+                  <div className="w-8 h-5 bg-linear-to-br from-gray-100 to-gray-300 border border-gray-400" />
                 </div>
                 
                 {/* Layer name */}

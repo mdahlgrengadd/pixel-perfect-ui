@@ -21,7 +21,7 @@ export const NavigatorPanelContent: React.FC = () => {
       {/* Thumbnail view */}
       <div
         ref={thumbnailRef}
-        className="relative bg-workspace border border-border cursor-move aspect-[4/3]"
+        className="relative bg-workspace border border-border cursor-move aspect-4/3"
         onClick={handleThumbnailClick}
       >
         {/* Document thumbnail */}
